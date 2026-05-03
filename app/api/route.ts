@@ -2,7 +2,7 @@ import { buildGNewsUrl } from './gnews-fetcher';
 import { NextRequest, NextResponse } from 'next/server';
 
 /**
- * GET /api/news
+ * GET /api/
  *
  * Proxies requests to the GNews API.
  * The API key is read from the server-side environment variable GNEWS_API_KEY

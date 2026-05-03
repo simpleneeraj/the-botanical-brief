@@ -1,8 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { GNewsArticle } from './types/gnews';
 import { useGreenhouseNews } from './hooks/use-greenhouse-news';
+import { setArticles } from './store';
 
 // ─── Topic tabs ───────────────────────────────────────────────────────────────
 
@@ -44,19 +46,15 @@ function ArticleCard({
 }) {
   if (featured) {
     return (
-      <a
-        href={article.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="featured-card group"
-      >
+      <Link href={`/${article.id}`} className="featured-card group">
         <div className="featured-image-wrap">
           {article.image ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={article.image}
               alt={article.title}
               className="featured-img"
-              sizes="(max-width: 768px) 100vw, 60vw"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           ) : (
             <div className="featured-img-placeholder" />
@@ -69,24 +67,20 @@ function ArticleCard({
           <p className="featured-desc">{article.description}</p>
           <span className="date-label">{formatDate(article.publishedAt)}</span>
         </div>
-      </a>
+      </Link>
     );
   }
 
   return (
-    <a
-      href={article.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="article-card group"
-    >
+    <Link href={`//${article.id}`} className="article-card group">
       <div className="article-image-wrap">
         {article.image ? (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={article.image}
             alt={article.title}
             className="article-img"
-            sizes="120px"
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
         ) : (
           <div className="article-img-placeholder" />
@@ -97,7 +91,7 @@ function ArticleCard({
         <h3 className="article-title">{article.title}</h3>
         <span className="date-label">{formatDate(article.publishedAt)}</span>
       </div>
-    </a>
+    </Link>
   );
 }
 
@@ -134,6 +128,11 @@ export default function Home() {
 
   const featured = articles[0] ?? null;
   const rest = articles.slice(1);
+
+  // Populate the in-memory store so the slug page can look up articles
+  useEffect(() => {
+    if (articles.length > 0) setArticles(articles);
+  }, [articles]);
 
   return (
     <>
