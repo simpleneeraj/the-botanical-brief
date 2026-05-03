@@ -72,7 +72,7 @@ function ArticleCard({
   }
 
   return (
-    <Link href={`//${article.id}`} className="article-card group">
+    <Link href={`/${article.id}`} className="article-card group">
       <div className="article-image-wrap">
         {article.image ? (
           // eslint-disable-next-line @next/next/no-img-element
